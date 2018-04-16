@@ -28,7 +28,8 @@ const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
  */
 module.exports = {
   getLeads: getLeads,
-  postLead: postLead
+  postLead: postLead,
+  putLead: putLead
 };
 
 /*
@@ -67,5 +68,16 @@ function postLead(req, res) {
   })
   .catch(error => {
     res.json(error)
+  });
+}
+
+function putLead(req, res) {
+  const leadData = req.swagger.params.body.value;
+  crm.postLead(leadData)
+  .then(lead => {
+    res.json({leadData: lead})
   })
+  .catch(error => {
+    res.json(error)
+  });
 }

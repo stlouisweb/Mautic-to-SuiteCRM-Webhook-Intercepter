@@ -78,6 +78,26 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      tags: ["SuiteCRM"]
+      description: Update an existing Lead.
+      operationId: putLead
+      parameters:
+        - name: body
+          in: body
+          description: an array of 'name/value' objects, including the lead id.
+          required: true
+          schema:
+            $ref: "#/definitions/NameValueList"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/LeadUpdate"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
