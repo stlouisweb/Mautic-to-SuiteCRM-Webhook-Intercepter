@@ -27,6 +27,8 @@ const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
   we specify that in the exports of this module that 'hello' maps to the function named 'hello'
  */
 module.exports = {
+  deleteLead: deleteLead,
+  getLead: getLead,
   getLeads: getLeads,
   postLead: postLead,
   putLead: putLead
@@ -38,6 +40,34 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
+function deleteLead(req, res) {
+  const leadId = req.swagger.params.leadId.value;
+  crm.deleteLead(leadId)
+  .then(message => {
+    res.json({message: 'deleted'})
+  }).catch(error => {
+    if (error === '404') {
+      res.status('404').json({message: '404 - No Lead found.'})
+    } else {
+      res.json(error)
+    }
+  });
+}
+
+function getLead(req, res) {
+  const leadId = req.swagger.params.leadId.value;
+  crm.fetchLead(leadId)
+  .then(crmResonse => {
+    res.json(crmResonse.entry_list[0])
+  }).catch(error => {
+    if (error === '404') {
+      res.status('404').json({message: '404 - No Lead found.'})
+    } else {
+      res.json(error)
+    }
+  });
+}
+
 function getLeads(req, res) {
   const params = req.swagger.params;
   const {max_results: {value: maxResults = 0},

@@ -41,6 +41,43 @@ class SuitecrmClient {
     }
   }
 
+  async deleteLead (leadId) {
+    try {
+      const session = await this.getSession();
+      const rest_data = {
+        session: session.id,
+        module_name: 'Leads',
+        name_value_list: [
+          {'name': 'id', 'value': leadId},
+          {'name': 'deleted', 'value': '1'}
+        ]
+      }
+      const crmResponse = await apiRequest(this.apiUrl, 'set_entry', rest_data);
+      return crmResponse
+    } catch(error) {
+      logger.error(error);
+      throw(error);
+    }
+  }
+
+  async fetchLead (leadId) {
+    try {
+      const session = await this.getSession();
+      const rest_data =
+      {
+        session: session.id,
+        module_name: 'Leads',
+        id: leadId,
+        select_fields: []
+      }
+      const crmResponse = await apiRequest(this.apiUrl, 'get_entry', rest_data);
+      return crmResponse
+    } catch(error) {
+      logger.error(error);
+      throw(error);
+    }
+  }
+
   async fetchLeads (maxResults, offset, orderBy, order) {
     try {
       const session = await this.getSession();
