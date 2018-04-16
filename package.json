@@ -1,0 +1,26 @@
+{
+  "name": "marketing-js",
+  "version": "0.0.1",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.12.3",
+    "lodash": "^4.17.5",
+    "ssl-root-cas": "^1.2.5",
+    "swagger-express-mw": "^0.1.0",
+    "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "swagger project test"
+  }
+}
