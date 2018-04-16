@@ -27,7 +27,8 @@ const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
   we specify that in the exports of this module that 'hello' maps to the function named 'hello'
  */
 module.exports = {
-  getLeads: getLeads
+  getLeads: getLeads,
+  postLead: postLead
 };
 
 /*
@@ -56,4 +57,15 @@ function getLeads(req, res) {
       res.json(error);
     }
   });
+}
+
+function postLead(req, res) {
+  const leadData = req.swagger.params.body.value;
+  crm.postLead(leadData)
+  .then(lead => {
+    res.json({leadData: lead})
+  })
+  .catch(error => {
+    res.json(error)
+  })
 }

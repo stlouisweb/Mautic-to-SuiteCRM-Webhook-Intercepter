@@ -58,16 +58,55 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    post:
+      tags: ["SuiteCRM"]
+      description: Create Lead
+      operationId: postLead
+      parameters:
+        - name: body
+          in: body
+          description: an array of 'name/value' objects.
+          required: true
+          schema:
+            $ref: "#/definitions/NameValueList"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/LeadUpdate"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  ErrorResponse:
+  Acl:
+    type: object
     required:
-      - message
+      - action
+      - access
     properties:
-      message:
+      action:
         type: string
+      access:
+        type: boolean
+  Deleted:
+    type: object
+  Email:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+  FullName:
+    type: object
+    properties:
+      fullName:
+        type: string
+  Hooks:
+    type: object
   Lead:
     type: object
     required:
@@ -93,3 +132,69 @@ definitions:
           wrapped: true
         items:
           $ref: "#/definitions/Lead"
+  LeadId:
+    type: string
+  LeadIds:
+    type: array
+    xml:
+      name: "blank lead ids"
+      wrapped: true
+    items:
+      $ref: "#/definitions/LeadId"
+  LeadUpdate:
+    type: object
+  Module:
+    type: object
+    required:
+      - module_key
+      - module_label
+      - acls
+    properties:
+      module_key:
+        type: string
+      module_label:
+        type: string
+      favorites_enabled:
+        type: boolean
+      acls:
+        type: array
+        xml:
+          name: "acls"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Acl"
+  Modules:
+    type: object
+    required:
+      - modules
+    properties:
+      modules:
+        type: array
+        xml:
+          name: "module"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Module"
+  NameValueList:
+    type: array
+    xml:
+      name: "Name Value Pairs"
+      wrapped: true
+    items:
+      $ref: "#/definitions/NameValuePair"
+  NameValuePair:
+    type: object
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

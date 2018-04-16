@@ -67,6 +67,23 @@ class SuitecrmClient {
       throw(error);
     }
   }
+
+  async postLead (leadData) {
+    try {
+      const session = await this.getSession();
+      const rest_data =
+      {
+        session: session.id,
+        module_name: 'Leads',
+        name_value_list: leadData
+      }
+      const crmResponse = await apiRequest(this.apiUrl, 'set_entry', rest_data);
+      return crmResponse
+    } catch(error) {
+      logger.error(error);
+      throw(error);
+    }
+  }
 }
 
 module.exports = SuitecrmClient
