@@ -10,8 +10,10 @@
 
   It is a good idea to list the modules that your application depends on in the package.json in the project root
  */
-var util = require('util');
-
+const logger = require('winston');
+const SuiteCrmClient = require('../helpers/suitecrm');
+const util = require('util');
+const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
 
@@ -25,7 +27,7 @@ var util = require('util');
   we specify that in the exports of this module that 'hello' maps to the function named 'hello'
  */
 module.exports = {
-  hello: hello
+  getLeads: getLeads
 };
 
 /*
@@ -34,11 +36,24 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
-function hello(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var name = req.swagger.params.name.value || 'stranger';
-  var hello = util.format('Hello, %s!', name);
+function getLeads(req, res) {
+  const params = req.swagger.params;
+  const {max_results: {value: maxResults = 0},
+    offset: {value: offset = 0},
+    order_by: {value: orderBy = 'date_entered'},
+    order: {value: order = 'DESC'}
+  } = params;
 
-  // this sends back a JSON response which is a single string
-  res.json(hello);
+  crm.fetchLeads(maxResults, offset, orderBy, order)
+  .then(leads => {
+    res.json({leads: leads});
+  })
+  .catch(error => {
+    if (error === '404') {
+      res.status('404').json({message: '404 - No Lead found.'});
+    } else {
+      logger.error(error);
+      res.json(error);
+    }
+  });
 }

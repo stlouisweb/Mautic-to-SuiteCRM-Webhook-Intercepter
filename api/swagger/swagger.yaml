@@ -1,12 +1,12 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Hello World App
+  title: Marketing JS (Mautic-SuiteCRM sync)
 # during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
+# basePath prefixes all resource paths
 basePath: /
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -18,26 +18,42 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+  /crm/lead:
+    x-swagger-router-controller: crm_lead
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
+      tags: ['SuiteCRM']
+      description: Returns a list of leads.
+      operationId: getLeads
       parameters:
-        - name: name
+        - name: max_results
           in: query
-          description: The name of the person to whom to say hello
+          description: the maximum number of leads to return, returns all leads if not specified.
+          required: false
+          type: number
+          format: float
+        - name: offset
+          in: query
+          description: the starting index in the leads array for pagination. defaults to 0 if not specified.
+          required: false
+          type: number
+          format: float
+        - name: order_by
+          in: query
+          description: the lead field to order the results by, defaults to date_entered if not specified.
           required: false
           type: string
+        - name: order
+          in: query
+          description: the direction to order the results, enter 'ASC' for ascending or 'DESC' for descending, defaults to 'DESC'.
+          type: string
+          enum:
+            - ASC
+            - DESC
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+            $ref: "#/definitions/Leads"
         default:
           description: Error
           schema:
@@ -46,15 +62,34 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
   ErrorResponse:
     required:
       - message
     properties:
       message:
         type: string
+  Lead:
+    type: object
+    required:
+      - id
+      - module_name
+      - name_value_list
+    properties:
+      id:
+        type: string
+      module_name:
+        type: string
+      name_value_list:
+        type: object
+  Leads:
+    type: object
+    required:
+      - leads
+    properties:
+      leads:
+        type: array
+        xml:
+          name: "lead"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Lead"
