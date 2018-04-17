@@ -29,6 +29,7 @@ const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
 module.exports = {
   deleteLead: deleteLead,
   findByEmail: findByEmail,
+  getBlanks: getBlanks,
   getLead: getLead,
   getLeads: getLeads,
   postLead: postLead,
@@ -66,6 +67,16 @@ function deleteLead(req, res) {
     } else {
       res.json(error)
     }
+  });
+}
+
+function getBlanks(req, res) {
+  crm.fetchBlanks()
+  .then(leadData => {
+    const leadIds = leadData.entry_list.map(lead => {
+      return lead.id
+    });
+    res.json(leadIds)
   });
 }
 

@@ -60,6 +60,29 @@ class SuitecrmClient {
     }
   }
 
+  async fetchBlanks () {
+    try{
+      const session = await this.getSession();
+      const rest_data =
+      {
+        session: session.id,
+        module_name: 'Leads',
+        query: "leads.id NOT IN "
+        + "(SELECT bean_id FROM email_addr_bean_rel eabr JOIN "
+        + "email_addresses ea ON (eabr.email_address_id = ea.id) WHERE "
+        + "bean_module = 'Leads' AND eabr.deleted=0) AND leads.first_name "
+        + "IS NULL AND leads.last_name LIKE 'UNKNOWN' AND "
+        + "leads.phone_home IS NULL AND leads.phone_work IS NULL "
+        + "AND leads.phone_mobile IS NULL"
+      }
+      const crmResponse = await apiRequest(this.apiUrl, 'get_entry_list', rest_data);
+      return crmResponse
+    } catch(error) {
+      logger.error(error);
+      throw(error);
+    }
+  }
+
   async fetchLead (leadId) {
     try {
       const session = await this.getSession();
@@ -117,8 +140,8 @@ class SuitecrmClient {
         + "bean_module = 'Leads' AND ea.email_address LIKE '" + email + "' AND "
         + "eabr.deleted=0)"
       }
-      const crmResonse = await apiRequest(this.apiUrl, 'get_entry_list', rest_data);
-      return crmResonse
+      const crmResponse = await apiRequest(this.apiUrl, 'get_entry_list', rest_data);
+      return crmResponse
     } catch(error) {
       logger.error(error);
       throw(error);

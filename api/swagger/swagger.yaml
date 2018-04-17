@@ -138,7 +138,22 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /crm/lead/findByEmail:
+  /crm/lead/find-blanks:
+    x-swagger-router-controller: crm_lead
+    get:
+      tags: ["SuiteCRM"]
+      description: Returns a list of leads without contact details.
+      operationId: getBlanks
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/LeadIds"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /crm/lead/find-by-email:
     x-swagger-router-controller: crm_lead
     post:
       tags: ["SuiteCRM"]
