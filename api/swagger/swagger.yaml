@@ -138,6 +138,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /crm/lead/findByEmail:
+    x-swagger-router-controller: crm_lead
+    post:
+      tags: ["SuiteCRM"]
+      description: Returns a list of matching leads.
+      operationId: findByEmail
+      parameters:
+        - name: body
+          in: body
+          description: the email to search for.
+          required: true
+          schema:
+            $ref: "#/definitions/Email"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Leads"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions

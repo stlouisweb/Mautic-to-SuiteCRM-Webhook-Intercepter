@@ -105,6 +105,26 @@ class SuitecrmClient {
     }
   }
 
+  async findByEmail(email) {
+    try {
+      const session = await this.getSession();
+      const rest_data =
+      {
+        session: session.id,
+        module_name: 'Leads',
+        query: "leads.id IN (SELECT bean_id FROM email_addr_bean_rel eabr JOIN "
+        + "email_addresses ea ON (eabr.email_address_id = ea.id) WHERE "
+        + "bean_module = 'Leads' AND ea.email_address LIKE '" + email + "' AND "
+        + "eabr.deleted=0)"
+      }
+      const crmResonse = await apiRequest(this.apiUrl, 'get_entry_list', rest_data);
+      return crmResonse
+    } catch(error) {
+      logger.error(error);
+      throw(error);
+    }
+  }
+
   async postLead (leadData) {
     try {
       const session = await this.getSession();

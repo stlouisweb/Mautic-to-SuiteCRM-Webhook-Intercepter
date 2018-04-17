@@ -28,6 +28,7 @@ const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
  */
 module.exports = {
   deleteLead: deleteLead,
+  findByEmail: findByEmail,
   getLead: getLead,
   getLeads: getLeads,
   postLead: postLead,
@@ -40,6 +41,20 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
+function findByEmail(req, res) {
+  const email = req.swagger.params.body.value.email;
+  crm.findByEmail(email)
+  .then(crmResonse => {
+    res.json({leads: crmResonse.entry_list})
+  }).catch(error => {
+    if (error === '404') {
+      res.status('404').json({message: '404 - No Lead found.'})
+    } else {
+      res.json(error)
+    }
+  });
+}
+
 function deleteLead(req, res) {
   const leadId = req.swagger.params.leadId.value;
   crm.deleteLead(leadId)
