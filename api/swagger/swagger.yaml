@@ -175,6 +175,21 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /mautic/points/triggers:
+    x-swagger-router-controller: mautic_settings
+    get:
+      tags: ['Mautic']
+      description: Returns a list of point triggers.
+      operationId: getPointTriggers
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Hooks"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
