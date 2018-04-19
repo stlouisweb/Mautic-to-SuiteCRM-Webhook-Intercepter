@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  version: '0.0.1'
-  title: Marketing JS (Mautic-SuiteCRM sync)
+  version: '0.1.0'
+  title: Mautic-to-SuiteCRM Webhook Intercepter
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths
