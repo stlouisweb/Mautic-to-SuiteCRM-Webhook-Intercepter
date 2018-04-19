@@ -13,7 +13,7 @@
 const logger = require('winston');
 const SuiteCrmClient = require('../helpers/suitecrm');
 const util = require('util');
-const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
+const crm = new SuiteCrmClient(process.env.SUITECRM_URL, process.env.SUITECRM_USERNAME, process.env.SUITECRM_PASSWORD);
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
 

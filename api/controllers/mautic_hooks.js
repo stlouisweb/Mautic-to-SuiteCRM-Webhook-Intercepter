@@ -15,8 +15,8 @@ const MauticClient = require('../helpers/mautic');
 const SuiteCrmClient = require('../helpers/suitecrm');
 const util = require('util');
 
-const crm = new SuiteCrmClient('https://crm.oci.lan', 'User', 'bitnami');
-const mautic = new MauticClient('https://mautic.oci.lan', 'User', 'bitnami');
+const crm = new SuiteCrmClient(process.env.SUITECRM_URL, process.env.SUITECRM_USERNAME, process.env.SUITECRM_PASSWORD);
+const mautic = new MauticClient(process.env.MAUTIC_URL, process.env.MAUTIC_USERNAME, process.env.MAUTIC_PASSWORD);
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
 
@@ -65,14 +65,18 @@ function handlePointsChange(req, res) {
       if (leadId) {
         let lead = makeLeadObject(mauticFields, leadData.entry_list[0]).then(response => {
           logger.info(`UPDATED CRM LEAD: ${response.id}`)
-          archiveEmptyLeads();
+          if (process.env.ARCHIVE_JUNK_LEADS == 'y') {
+            archiveEmptyLeads();
+          }
           res.json({"message": `UPDATED CRM LEAD: ${response.id}`});
           return
         });
       } else {
         let lead = makeLeadObject(mauticFields).then(response => {
           logger.info(`UPDATED CRM LEAD: ${response.id}`)
-          archiveEmptyLeads();
+          if (process.env.ARCHIVE_JUNK_LEADS == 'y') {
+            archiveEmptyLeads();
+          }
           res.json({"message": `UPDATED CRM LEAD: ${response.id}`});
           return
         });

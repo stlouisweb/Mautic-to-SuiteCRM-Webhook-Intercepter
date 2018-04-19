@@ -14,7 +14,7 @@ const logger = require('winston');
 const MauticClient = require('../helpers/mautic');
 const util = require('util');
 
-const mautic = new MauticClient('https://mautic.oci.lan', 'User', 'bitnami');
+const mautic = new MauticClient(process.env.MAUTIC_URL, process.env.MAUTIC_USERNAME, process.env.MAUTIC_PASSWORD);
 /*
  Once you 'require' a module you can reference the things that it exports.  These are defined in module.exports.
 
