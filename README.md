@@ -30,15 +30,37 @@ The next step is to launch the Intercepter server and configure the webhook in M
   - `git clone url`
 2. Configure settings:
   - `cd path && ./setup.sh`
-3. Start the server:
+3. Configurer Mautic API Settings:
+  - <img src="./docs/apisettings.png" width="700">
+4. Start the server:
   - `npm install`
   - `npm start`
-4. Test Swagger endpoints:
+5. Test Swagger endpoints:
 
   - [http://server-address:10010/docs/#!](http://server-address:10010/docs/#!)
     <img src="./docs/swagger_ui.png" width="700">
+    The SuiteCRM endpoints and the Mautic point-triggers endpoint should be working now.
 
+6. Configure the webhook settings in Mautic:
+  - [https://mautic-url.com/s/webhooks/1](https://mautic-url.com/s/webhooks/1)
+  make sure "Contact Update Event" is selected:
+  <img src="./docs/webhook.png" width="700">
 
-### Logs
+7. Test the webhook:
+  - Create new contact in Mautic with 50 points and at least an e-mail address.
+  - Verify contact is created in SuiteCrm.
+  - Modify contact information in Mautic and increase the points value.
+  - Verify that contact information has been updated in SuiteCRM.
+
+### Debugging:
+
+If you don't see the behavior above then check the swagger endpoints again and look to the webhook logs in Mautic and the Intercepter log file (`path/to/project/log/application.log`). There is likely an issue with the Mautic cache, you should clear the cache, and in the Mautic configuration settings, change the cache dir to a new directory on the same level as `/var/www/html/app/`.
+  - `php app/console cache:clear`
+
+  - <img src="./docs/cachedir.png" width="700">
 
 ## Docker Compose
+
+Here is a link to a complete environment set up with Mautic, SuiteCRM, the webhook intercepter, and nginx, orchestrated with docker-compose.
+
+[github url](github url)
