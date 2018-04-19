@@ -58,9 +58,3 @@ If you don't see the behavior above then check the swagger endpoints again and l
   - `php app/console cache:clear`
 
   - <img src="./docs/cachedir.png" width="700">
-
-## Docker Compose
-
-Here is a link to a complete environment set up with Mautic, SuiteCRM, the webhook intercepter, and nginx, orchestrated with docker-compose.
-
-[github url](github url)
